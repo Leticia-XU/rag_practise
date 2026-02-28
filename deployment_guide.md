@@ -1,4 +1,5 @@
 Private RAG Deployment Guide (Fully On-Premise)
+。
 
 🛠️ 第一阶段：系统环境预热
 在 Ubuntu 24.04 上执行，确保内核参数满足 Elasticsearch 客户端与 Docker 容器的需求。
@@ -92,3 +93,4 @@ Bash
 pkill -f vllm
 # 修改命令后再次执行 nohup 启动
 防火墙: 确保云安全组开启 80 (Web) 和 7777 (vLLM API) 端口。
+
