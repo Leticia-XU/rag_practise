@@ -49,12 +49,13 @@ git clone https://github.com/infiniflow/ragflow.git
 cd ragflow/docker
 ```
 
-2. 配置 docker-compose.yml，禁用GPU:
+2. 启动ragflow-cpu
+   ragflow 0.24.0版本不再内置embedding和rerank模型，因此不需要修改 docker-compose.yml，禁用GPU:
 
 一键启动:
 
 ```Bash
-sudo docker compose up -d
+sudo docker compose up -d ragflow-cpu
 ```
 
 ## 📦 第四阶段：部署 Xinference 
