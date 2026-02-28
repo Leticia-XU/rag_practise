@@ -43,11 +43,17 @@ Qianwen 生成回答
 
 # ⚙ Docker 部署结构(docker ps --format "{{.Names}}")
 xinference
+
 docker-ragflow-cpu-1
+
 docker-redis-1
+
 docker-minio-1
+
 docker-es01-1
+
 docker-mysql-1
+
 
 🧠 关键注意事项
 1️⃣ RAGFlow 不再内置 embedding
