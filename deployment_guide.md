@@ -14,10 +14,13 @@ sudo apt update && sudo apt install docker.io docker-compose-v2 -y
 sudo systemctl start docker && sudo systemctl enable docker
 ```
 
-🧠 第二阶段：部署 Qwen2-7B 推理后端
+🧠 第二阶段：启动 Qwen2-7B 推理后端
 使用 vLLM 启动 AWQ 量化版模型。针对 T4 (16GB) 显存，我们优化了 gpu-memory-utilization 以预留 OCR 解析空间。
 
 ```Bash
+#进入虚拟环境
+conda activate llm_eval
+
 # 使用 nohup 在后台启动模型，防止 SSH 断开导致退出
 nohup python -m vllm.entrypoints.openai.api_server \
   --model Qwen/Qwen2-7B-Instruct-AWQ \
@@ -33,8 +36,7 @@ tail -f vllm.log
 
 原理: --max-model-len 4096 确保了长文档阅读能力，同时 0.80 的显存利用率留出了约 3GB 缓冲区给系统与 RAGFlow 的图形处理。
 
-📦 第三阶段：部署 RAGFlow (对接外部云 ES)
-本方案弃用 Docker 内置 ES，改用云端专用 ES 7.10.2 以节省本地内存。
+📦 第三阶段：部署 RAGFlow 
 
 1. 克隆仓库:
 
@@ -43,26 +45,73 @@ git clone https://github.com/infiniflow/ragflow.git
 cd ragflow/docker
 ```
 
-2. 配置环境变量 (.env):
-修改以下字段以对接你的云 ES 实例：
-
-```Bash
-ELASTICSEARCH_HOSTS=http://<你的云ES内网IP>:9200
-ELASTICSEARCH_USER=elastic
-ELASTICSEARCH_PASSWORD=<你的密码>
-STACK_VERSION=7.10.2
-```
-3. 精简 docker-compose.yml:
-
-原因: 物理内存受限，需删除/注释掉本地 es01 服务块。
-
-操作: 在 docker-compose.yml 中删除 elasticsearch 服务定义，并移除 ragflow-server 对其的 depends_on。
+2. 配置 docker-compose.yml，禁用GPU:
 
 一键启动:
 
 ```Bash
 sudo docker compose up -d
 ```
+
+3. 用 Xinference 在同一台服务器提供 Embedding + Rerank（CPU）:
+1）起一个 Xinference（CPU）容器
+
+在宿主机创建持久化目录（避免模型每次重下）：
+```Bash
+mkdir -p /opt/xinference
+```
+启动 Xinference（CPU 镜像）：
+
+```Bash
+docker run -d --name xinference \
+  -p 9997:9997 \
+  -e XINFERENCE_HOME=/data \
+  -v /opt/xinference:/data \
+  xprobe/xinference:latest-cpu \
+  xinference-local -H 0.0.0.0
+```
+
+说明：xprobe/xinference:latest-cpu 是官方提供的 CPU 用法之一；端口默认服务在 9997。
+
+2）在 Xinference 里启动两个模型（Embedding + Rerank）
+
+进入容器：
+
+```Bash
+docker exec -it xinference bash
+```
+启动 embedding（bge-m3）：
+```Bash
+xinference launch --model-type embedding --model-name bge-m3
+```
+```Bash
+启动 rerank（bge-reranker-v2-m3）：
+```Bash
+xinference launch --model-type rerank --model-name bge-reranker-v2-m3
+```
+bge-reranker-v2-m3 的启动命令在 Xinference 文档里就是这种形式。
+
+ 
+3）在 RAGFlow UI 里接入 Xinference（Embedding + Rerank）
+
+按官方 UI 路径操作：右上角头像（或你的 Logo） → Model providers → 添加 Xinference。
+
+Embedding 的 Base URL 填：
+
+http://172.17.0.1:9997/v1
+
+Rerank 要单独用这个 Base URL（非常关键）：
+
+http://172.17.0.1:9997/v1/rerank
+
+保存后，去知识库/数据集的设置里：
+
+Embedding 选 bge-m3
+
+Rerank 选 bge-reranker-v2-m3
+
+
+
 
 ⚙️ 第四阶段：Web UI 配置 (关键优化)
 访问 http://<服务器IP> 进入后台：
@@ -71,21 +120,12 @@ sudo docker compose up -d
 
 Provider: OpenAI-compatible
 
-Base URL: http://<服务器内网IP>:****/v1
+Base URL: http://172.17.0.1:****/v1
 
-Model Name: Qwen2-7B-Instruct-AWQ
+Model Name: Qwen/Qwen2-7B-Instruct-AWQ
 
-2. 显存保卫设置:
 
-进入 System Model Settings。
 
-将 Embedding Model (BAAI/bge-m3) 的 Device 强制设为 CPU。
-
-原因: BGE-M3 在 CPU 跑速度尚可，但能节省 1-2GB 宝贵显存供 Qwen2 稳定运行。
-
-3. 解析模板:
-
-创建数据集时选择 General。该模板会调用 OCR 自动识别中文设计稿中的图片和表格。
 
 🌍 跨国协作设置 (Prompt)
 为德国同事设置 System Prompt，确保跨语言理解：
