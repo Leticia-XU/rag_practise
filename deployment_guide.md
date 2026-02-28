@@ -4,7 +4,7 @@ Private RAG Deployment Guide (Fully On-Premise)
 🛠️ 第一阶段：系统环境预热
 在 Ubuntu 24.04 上执行，确保内核参数满足 Elasticsearch 客户端与 Docker 容器的需求。
 
-Bash
+```Bash
 # 1. 提升内存映射限制（Elasticsearch 运行必备）
 sudo sysctl -w vm.max_map_count=262144
 echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
