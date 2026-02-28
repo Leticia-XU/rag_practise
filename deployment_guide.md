@@ -57,7 +57,9 @@ cd ragflow/docker
 sudo docker compose up -d
 ```
 
-3. 用 Xinference 在同一台服务器提供 Embedding + Rerank（CPU）:
+📦 第四阶段：部署 Xinference 
+
+1. 用 Xinference 在同一台服务器提供 Embedding + Rerank（CPU）:
 1）起一个 Xinference（CPU）容器
 
 在宿主机创建持久化目录（避免模型每次重下）：
@@ -94,8 +96,9 @@ xinference launch --model-type embedding --model-name bge-m3
 xinference launch --model-type rerank --model-name bge-reranker-v2-m3
 ```
 
+⚙️  第五阶段：RAGFlow UI 接入大模型 
  
-3）在 RAGFlow UI 里接入 Xinference（Embedding + Rerank）
+1. 在 RAGFlow UI 里接入 Xinference（Embedding + Rerank）
 
 在浏览器上访问 http://<服务器IP> 进入UI
 
@@ -117,7 +120,7 @@ http://172.17.0.1:9997/v1/rerank
 
 
 
-⚙️ 第四阶段：在 RAGFlow UI 里接入Qwen2 
+2. 在 RAGFlow UI 里接入Qwen2 
 
 在浏览器上访问 http://<服务器IP> 进入UI：
 
@@ -132,7 +135,8 @@ Model Name: Qwen/Qwen2-7B-Instruct-AWQ
 
 最大token数： 4096
 
-#保存后，设置ragflow默认模型配置
+
+3.保存后，设置ragflow默认模型配置
 
 #右上角头像（或你的 Logo） → Model providers ->设置默认模型：
 
@@ -142,21 +146,25 @@ Embedding 选 bge-m3
 
 Rerank 选 bge-reranker-v2-m3
 
+🌍 第六阶段：创建知识库，上传文档
 
-🌍 跨国协作设置 (Prompt)
+🌍 第七阶段：跨国协作设置 (Prompt)
 为德国同事设置 System Prompt，确保跨语言理解：
 
 "You are an AI assistant for a private engineering library. The source documents are Chinese design files. Please answer the user in English/German. Explicitly mention the page numbers and figure names when referencing diagrams."
 
-🛑 管理与维护
-查看状态: nvidia-smi 监控显存，确保 Usage 控制在 15GB 以下。
-
-更新模型参数:
-
+🛑 其他：管理与维护
+# 1. 查看状态: nvidia-smi 监控显存，确保 Usage 控制在 15GB 以下。
+# 2. 测试embedding模型是否启用
+进入 ragflow 容器：
 ```Bash
-# 查找并关闭 vLLM
-pkill -f vllm
-# 修改命令后再次执行 nohup 启动
+docker exec -it docker-ragflow-cpu-1 bash
 ```
-防火墙: 确保云安全组开启 80 (Web) 和 7777 (vLLM API) 端口。
+测试：
+```Bash
+curl http://172.17.0.1:9997/v1/models
+```
+如果能返回 JSON，说明能用。
+
+#3. 防火墙: 确保云安全组开启 80 (Web) 和 **** (vLLM API) , embedding端口9997。
 
