@@ -68,6 +68,7 @@ docker-mysql-1
 
 
 🧠 关键注意事项
+
 1️⃣ RAGFlow 不再内置 embedding
 
 从 0.22+ 开始：
