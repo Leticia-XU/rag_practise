@@ -67,7 +67,7 @@ docker-mysql-1
 
 
 
-🧠 关键注意事项
+# 🧠 关键注意事项
 
 1️⃣ RAGFlow 不再内置 embedding
 
@@ -88,11 +88,16 @@ TopK = 10
 TopN = 3
 
 3️⃣ Search vs Chat 区别
+
 功能	是否调用 LLM
+
 Search	❌ 否
+
 Chat	✅ 是
 
+
 Search 仅调试召回是否正确
+
 Chat 才是完整 RAG 流程
 
 4️⃣ bge-m3 适合跨语言
@@ -106,7 +111,9 @@ Chat 才是完整 RAG 流程
 不建议使用 bge-large-zh（仅中文）
 
 5️⃣ embedding进度查询
+
 docker stats
+
 如果 xinference CPU > 200%，说明正在计算。
 
 
