@@ -1,7 +1,7 @@
 Private RAG Deployment Guide (Fully On-Premise)
 。
 
-🛠️ 第一阶段：系统环境预热
+## 🛠️ 第一阶段：系统环境预热
 在 Ubuntu 24.04 上执行，确保内核参数满足 Elasticsearch 客户端与 Docker 容器的需求。
 
 ```Bash
@@ -14,7 +14,7 @@ sudo apt update && sudo apt install docker.io docker-compose-v2 -y
 sudo systemctl start docker && sudo systemctl enable docker
 ```
 
-🧠 第二阶段：启动 Qwen2-7B 推理后端
+## 🧠 第二阶段：启动 Qwen2-7B 推理后端
 使用 vLLM 启动 AWQ 量化版模型。针对 T4 (16GB) 显存，我们优化了 gpu-memory-utilization 以预留 OCR 解析空间。
 
 ```Bash
@@ -40,7 +40,7 @@ tail -f vllm.log
 
 原理: --max-model-len 4096 确保了长文档阅读能力，同时 0.80 的显存利用率留出了约 3GB 缓冲区给系统与 RAGFlow 的图形处理。
 
-📦 第三阶段：部署 RAGFlow 
+## 📦 第三阶段：部署 RAGFlow 
 
 1. 克隆仓库:
 
@@ -57,7 +57,7 @@ cd ragflow/docker
 sudo docker compose up -d
 ```
 
-📦 第四阶段：部署 Xinference 
+## 📦 第四阶段：部署 Xinference 
 
 1. 用 Xinference 在同一台服务器提供 Embedding + Rerank（CPU）:
 1）起一个 Xinference（CPU）容器
@@ -96,7 +96,7 @@ xinference launch --model-type embedding --model-name bge-m3
 xinference launch --model-type rerank --model-name bge-reranker-v2-m3
 ```
 
-⚙️  第五阶段：RAGFlow UI 接入大模型 
+## ⚙️  第五阶段：RAGFlow UI 接入大模型 
  
 1. 在 RAGFlow UI 里接入 Xinference（Embedding + Rerank）
 
@@ -146,14 +146,14 @@ Embedding 选 bge-m3
 
 Rerank 选 bge-reranker-v2-m3
 
-🌍 第六阶段：创建知识库，上传文档
+## 🌍 第六阶段：创建知识库，上传文档
 
-🌍 第七阶段：跨国协作设置 (Prompt)
+## 🌍 第七阶段：跨国协作设置 (Prompt)
 为德国同事设置 System Prompt，确保跨语言理解：
 
 "You are an AI assistant for a private engineering library. The source documents are Chinese design files. Please answer the user in English/German. Explicitly mention the page numbers and figure names when referencing diagrams."
 
-🛑 其他：管理与维护
+## 🛑 其他：管理与维护
 # 1. 查看状态: nvidia-smi 监控显存，确保 Usage 控制在 15GB 以下。
 # 2. 测试embedding模型是否启用
 进入 ragflow 容器：
