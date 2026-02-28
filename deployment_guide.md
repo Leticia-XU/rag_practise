@@ -1,3 +1,5 @@
+Private RAG Deployment Guide (Fully On-Premise)
+
 🛠️ 第一阶段：系统环境预热
 在 Ubuntu 24.04 上执行，确保内核参数满足 Elasticsearch 客户端与 Docker 容器的需求。
 
