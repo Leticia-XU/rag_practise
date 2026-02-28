@@ -50,6 +50,7 @@ cd ragflow/docker
 ```
 
 2. 启动ragflow-cpu
+
    ragflow 0.24.0版本不再内置embedding和rerank模型，因此不需要修改 docker-compose.yml，禁用GPU:
 
 一键启动:
