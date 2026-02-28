@@ -62,6 +62,7 @@ sudo docker compose up -d ragflow-cpu
 ## 📦 第四阶段：部署 Xinference 
 
 1. 用 Xinference 在同一台服务器提供 Embedding + Rerank（CPU）:
+   
 1）起一个 Xinference（CPU）容器
 
 在宿主机创建持久化目录（避免模型每次重下）：
