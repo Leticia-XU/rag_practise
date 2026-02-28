@@ -133,6 +133,7 @@ Model Name: Qwen/Qwen2-7B-Instruct-AWQ
 最大token数： 4096
 
 #保存后，设置ragflow默认模型配置
+
 #右上角头像（或你的 Logo） → Model providers ->设置默认模型：
 
 LLM 选 Qwen/Qwen2-7B-Instruct-AWQ
