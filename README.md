@@ -65,6 +65,8 @@ docker-es01-1
 docker-mysql-1
 
 
+
+
 🧠 关键注意事项
 1️⃣ RAGFlow 不再内置 embedding
 
