@@ -14,6 +14,14 @@
 
 ---
 
+## 🎯 环境配置
+12 vCPUs | 48 GiB 
+Ubuntu 24.04
+NVIDIA Tesla T4 (16GB)
+Driver 590
+CUDA 13.1
+Python 3.10
+
 # 🏗 系统架构
 用户（英文/德文提问）
 
