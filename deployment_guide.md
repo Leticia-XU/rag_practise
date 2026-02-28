@@ -154,8 +154,9 @@ Rerank 选 bge-reranker-v2-m3
 "You are an AI assistant for a private engineering library. The source documents are Chinese design files. Please answer the user in English/German. Explicitly mention the page numbers and figure names when referencing diagrams."
 
 ## 🛑 其他：管理与维护
-# 1. 查看状态: nvidia-smi 监控显存，确保 Usage 控制在 15GB 以下。
-# 2. 测试embedding模型是否启用
+
+#1. 查看状态: nvidia-smi 监控显存，确保 Usage 控制在 15GB 以下。
+#2. 测试embedding模型是否启用
 进入 ragflow 容器：
 ```Bash
 docker exec -it docker-ragflow-cpu-1 bash
