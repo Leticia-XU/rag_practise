@@ -32,6 +32,10 @@ nohup python -m vllm.entrypoints.openai.api_server \
 
 # 验证启动状态（查看日志）
 tail -f vllm.log
+
+#测试模型是否启动，查看uid
+ curl http://localhost:****/v1/models
+
 ```
 
 原理: --max-model-len 4096 确保了长文档阅读能力，同时 0.80 的显存利用率留出了约 3GB 缓冲区给系统与 RAGFlow 的图形处理。
@@ -84,47 +88,51 @@ docker exec -it xinference bash
 ```Bash
 xinference launch --model-type embedding --model-name bge-m3
 ```
-```Bash
+
 启动 rerank（bge-reranker-v2-m3）：
 ```Bash
 xinference launch --model-type rerank --model-name bge-reranker-v2-m3
 ```
-bge-reranker-v2-m3 的启动命令在 Xinference 文档里就是这种形式。
 
  
 3）在 RAGFlow UI 里接入 Xinference（Embedding + Rerank）
 
-按官方 UI 路径操作：右上角头像（或你的 Logo） → Model providers → 添加 Xinference。
+在浏览器上输入服务器公网IP
+注册账号
+
+#右上角头像（或你的 Logo） → Model providers → 添加 Xinference。
 
 Embedding 的 Base URL 填：
 
 http://172.17.0.1:9997/v1
+最大token数：512
 
 Rerank 要单独用这个 Base URL（非常关键）：
 
 http://172.17.0.1:9997/v1/rerank
-
-保存后，去知识库/数据集的设置里：
-
-Embedding 选 bge-m3
-
-Rerank 选 bge-reranker-v2-m3
+最大token数：512
 
 
 
+⚙️ 第四阶段：在 RAGFlow UI 里接入Qwen2 
+在浏览器上访问 http://<服务器IP> 进入UI：
 
-⚙️ 第四阶段：Web UI 配置 (关键优化)
-访问 http://<服务器IP> 进入后台：
-
-1. 接入 Qwen2:
+#右上角头像（或你的 Logo） → Model providers →添加LLM
+接入 Qwen2:
 
 Provider: OpenAI-compatible
 
 Base URL: http://172.17.0.1:****/v1
 
 Model Name: Qwen/Qwen2-7B-Instruct-AWQ
+最大token数： 4096
 
+#保存后，设置ragflow默认模型配置
+#右上角头像（或你的 Logo） → Model providers ->设置默认模型：
+LLM 选 Qwen/Qwen2-7B-Instruct-AWQ
+Embedding 选 bge-m3
 
+Rerank 选 bge-reranker-v2-m3
 
 
 🌍 跨国协作设置 (Prompt)
