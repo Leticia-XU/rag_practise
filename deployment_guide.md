@@ -97,7 +97,8 @@ xinference launch --model-type rerank --model-name bge-reranker-v2-m3
  
 3）在 RAGFlow UI 里接入 Xinference（Embedding + Rerank）
 
-在浏览器上输入服务器公网IP
+在浏览器上访问 http://<服务器IP> 进入UI
+
 注册账号
 
 #右上角头像（或你的 Logo） → Model providers → 添加 Xinference。
@@ -105,16 +106,19 @@ xinference launch --model-type rerank --model-name bge-reranker-v2-m3
 Embedding 的 Base URL 填：
 
 http://172.17.0.1:9997/v1
+
 最大token数：512
 
 Rerank 要单独用这个 Base URL（非常关键）：
 
 http://172.17.0.1:9997/v1/rerank
+
 最大token数：512
 
 
 
 ⚙️ 第四阶段：在 RAGFlow UI 里接入Qwen2 
+
 在浏览器上访问 http://<服务器IP> 进入UI：
 
 #右上角头像（或你的 Logo） → Model providers →添加LLM
@@ -125,11 +129,14 @@ Provider: OpenAI-compatible
 Base URL: http://172.17.0.1:****/v1
 
 Model Name: Qwen/Qwen2-7B-Instruct-AWQ
+
 最大token数： 4096
 
 #保存后，设置ragflow默认模型配置
 #右上角头像（或你的 Logo） → Model providers ->设置默认模型：
+
 LLM 选 Qwen/Qwen2-7B-Instruct-AWQ
+
 Embedding 选 bge-m3
 
 Rerank 选 bge-reranker-v2-m3
