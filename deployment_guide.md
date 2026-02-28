@@ -158,6 +158,7 @@ Rerank 选 bge-reranker-v2-m3
 #1. 查看状态: nvidia-smi 监控显存，确保 Usage 控制在 15GB 以下。
 
 #2. 测试embedding模型是否启用
+
 进入 ragflow 容器：
 ```Bash
 docker exec -it docker-ragflow-cpu-1 bash
@@ -168,5 +169,6 @@ curl http://172.17.0.1:9997/v1/models
 ```
 如果能返回 JSON，说明能用。
 
-#3. 防火墙: 确保云安全组开启 80 (Web) 和 **** (vLLM API) , embedding端口9997。
+#3. 防火墙: 
+确保云安全组开启 80 (Web) 和 **** (vLLM API) , embedding端口9997。
 
