@@ -16,14 +16,19 @@
 
 # 🏗 系统架构
 用户（英文/德文提问）
+
 ↓
 RAGFlow Assistant
+
 ↓
 Embedding（bge-m3）
+
 ↓
 Elasticsearch 向量检索
+
 ↓
 Rerank（bge-reranker-v2-m3）
+
 ↓
 Qianwen 生成回答
 
