@@ -117,6 +117,7 @@ http://172.17.0.1:9997/v1
 
 最大token数：512
 
+UID: bge-reranker-v2-m3
 Rerank 要单独用这个 Base URL（非常关键）：
 
 http://172.17.0.1:9997/v1/rerank
