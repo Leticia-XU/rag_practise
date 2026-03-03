@@ -109,6 +109,8 @@ xinference launch --model-type rerank --model-name bge-reranker-v2-m3
 
 #右上角头像（或你的 Logo） → Model providers → 添加 Xinference。
 
+UID: bge-m3
+
 Embedding 的 Base URL 填：
 
 http://172.17.0.1:9997/v1
